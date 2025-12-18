@@ -87,6 +87,29 @@ scale_factor = 1.0  # Change this to 0.5 for tiny tree, 2.0 for giant tree
 - **The tree is TOO festive**: We're working on making it less awesome (just kidding, this is a feature)
 - **Addictive**: You might find yourself staring at the snow instead of working (we warned you)
 
+## 📦 Download Pre-built Executable
+
+**Don't want to install Python?** Download the ready-to-run app:
+
+### [📥 Download Latest Release](https://github.com/alikaan/ny-tree/releases/latest)
+
+#### macOS Users:
+1. Download `NewYearTree-macOS-v1.0.0.zip`
+2. Extract it
+3. Right-click → Open (first time only, bypass security warning)
+4. Enjoy your festive tree! 🎄
+
+#### Windows Users:
+1. Download `NewYearTree-Windows-v1.0.0.zip`
+2. Extract it
+3. Double-click to run
+4. Windows Defender might show a warning (click "More info" → "Run anyway")
+5. Enjoy your festive tree! 🎄
+
+> **Note:** The warning appears because the app isn't digitally signed. The source code is open for review!
+
+---
+
 ## 🤝 Contributing
 
 Found a bug? Want to add more ornaments? PRs are welcome! Let's make this tree even more ridiculous... I mean, amazing! 🎁
