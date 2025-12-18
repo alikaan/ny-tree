@@ -50,7 +50,7 @@ else:  # Linux
     canvas_bg = "black"
 
 # Size scale factor
-scale_factor = 1.0
+scale_factor = 0.8
 BASE_WIDTH, BASE_HEIGHT = 220, 320
 
 def update_size():
@@ -230,6 +230,15 @@ star = None
 lights = []
 snowflakes = []
 redraw_tree()
+
+# Position window at bottom-left corner of screen
+root.update_idletasks()  # Update to get accurate window size
+screen_width = root.winfo_screenwidth()
+screen_height = root.winfo_screenheight()
+window_height = root.winfo_height()
+
+# Position: x=0 (left), y=screen_height - window_height (bottom)
+root.geometry(f"+0+{screen_height - window_height}")
 
 star_glow = True
 def glow_star():
