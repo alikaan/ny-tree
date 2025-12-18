@@ -7,6 +7,7 @@ import platform
 root = tk.Tk()
 
 # ---- SET ICON ----
+# Create a simple Christmas tree icon
 try:
     # Create a small PhotoImage for the icon (32x32)
     icon = tk.PhotoImage(width=32, height=32)
@@ -48,151 +49,200 @@ else:  # Linux
     root.attributes("-transparentcolor", "black")
     canvas_bg = "black"
 
-WIDTH, HEIGHT = 220, 320
+# Size scale factor
+scale_factor = 1.0
+BASE_WIDTH, BASE_HEIGHT = 220, 320
+
+def update_size():
+    global scale_factor
+    WIDTH = int(BASE_WIDTH * scale_factor)
+    HEIGHT = int(BASE_HEIGHT * scale_factor)
+    canvas.config(width=WIDTH, height=HEIGHT)
+    redraw_tree()
+
+def redraw_tree():
+    global star, lights, snowflakes, scale_factor
+    
+    WIDTH = int(BASE_WIDTH * scale_factor)
+    HEIGHT = int(BASE_HEIGHT * scale_factor)
+    CENTER_X = WIDTH // 2
+    
+    # Clear canvas
+    canvas.delete("all")
+    
+    # ---- STAR ----
+    star = canvas.create_polygon(
+        CENTER_X, int(20 * scale_factor),
+        CENTER_X + int(6 * scale_factor), int(35 * scale_factor),
+        CENTER_X + int(22 * scale_factor), int(35 * scale_factor),
+        CENTER_X + int(10 * scale_factor), int(45 * scale_factor),
+        CENTER_X + int(15 * scale_factor), int(60 * scale_factor),
+        CENTER_X, int(50 * scale_factor),
+        CENTER_X - int(15 * scale_factor), int(60 * scale_factor),
+        CENTER_X - int(10 * scale_factor), int(45 * scale_factor),
+        CENTER_X - int(22 * scale_factor), int(35 * scale_factor),
+        CENTER_X - int(6 * scale_factor), int(35 * scale_factor),
+        fill="gold", outline=""
+    )
+    
+    # ---- TREE ----
+    canvas.create_polygon(
+        CENTER_X, int(50 * scale_factor),
+        int(55 * scale_factor), int(150 * scale_factor),
+        int(85 * scale_factor), int(150 * scale_factor),
+        int(35 * scale_factor), int(270 * scale_factor),
+        WIDTH - int(35 * scale_factor), int(270 * scale_factor),
+        WIDTH - int(85 * scale_factor), int(150 * scale_factor),
+        WIDTH - int(55 * scale_factor), int(150 * scale_factor),
+        fill="#0b6623", outline=""
+    )
+    
+    # ---- TRUNK ----
+    canvas.create_rectangle(
+        CENTER_X - int(15 * scale_factor), int(270 * scale_factor),
+        CENTER_X + int(15 * scale_factor), int(300 * scale_factor),
+        fill="#6f4e37", outline=""
+    )
+    
+    # ---- ORNAMENTS ----
+    ornament_colors = ["red", "gold", "blue", "pink", "silver", "purple"]
+    
+    ornament_positions = [
+        (CENTER_X - int(15 * scale_factor), int(95 * scale_factor)),
+        (CENTER_X + int(15 * scale_factor), int(95 * scale_factor)),
+        (CENTER_X, int(110 * scale_factor)),
+        (CENTER_X - int(25 * scale_factor), int(125 * scale_factor)),
+        (CENTER_X + int(25 * scale_factor), int(125 * scale_factor)),
+        (CENTER_X - int(35 * scale_factor), int(145 * scale_factor)),
+        (CENTER_X + int(35 * scale_factor), int(145 * scale_factor)),
+        (CENTER_X - int(20 * scale_factor), int(160 * scale_factor)),
+        (CENTER_X + int(20 * scale_factor), int(160 * scale_factor)),
+        (CENTER_X - int(45 * scale_factor), int(180 * scale_factor)),
+        (CENTER_X + int(45 * scale_factor), int(180 * scale_factor)),
+        (CENTER_X - int(30 * scale_factor), int(200 * scale_factor)),
+        (CENTER_X + int(30 * scale_factor), int(200 * scale_factor)),
+        (CENTER_X - int(50 * scale_factor), int(220 * scale_factor)),
+        (CENTER_X + int(50 * scale_factor), int(220 * scale_factor)),
+        (CENTER_X - int(25 * scale_factor), int(240 * scale_factor)),
+        (CENTER_X + int(25 * scale_factor), int(240 * scale_factor)),
+        (CENTER_X - int(40 * scale_factor), int(255 * scale_factor)),
+        (CENTER_X + int(40 * scale_factor), int(255 * scale_factor))
+    ]
+    
+    for x, y in ornament_positions:
+        color = random.choice(ornament_colors)
+        ornament_size = int(5 * scale_factor)
+        
+        canvas.create_oval(
+            x - ornament_size, y - ornament_size, 
+            x + ornament_size, y + ornament_size,
+            fill=color, outline="", width=0
+        )
+        
+        shine_size = int(3 * scale_factor)
+        canvas.create_oval(
+            x - shine_size, y - shine_size, 
+            x - int(1 * scale_factor), y - int(1 * scale_factor),
+            fill="white", outline="", stipple="gray50"
+        )
+        
+        canvas.create_rectangle(
+            x - int(1.5 * scale_factor), y - int(7 * scale_factor), 
+            x + int(1.5 * scale_factor), y - int(5 * scale_factor),
+            fill="#C0C0C0", outline=""
+        )
+    
+    # ---- STAR ORNAMENTS ----
+    star_positions = [
+        (CENTER_X - int(10 * scale_factor), int(130 * scale_factor)),
+        (CENTER_X + int(10 * scale_factor), int(175 * scale_factor)),
+        (CENTER_X, int(210 * scale_factor))
+    ]
+    
+    for x, y in star_positions:
+        s = scale_factor
+        canvas.create_polygon(
+            x, y - int(3 * s),
+            x + int(1 * s), y - int(1 * s),
+            x + int(3 * s), y - int(1 * s),
+            x + int(1.5 * s), y + int(0.5 * s),
+            x + int(2 * s), y + int(3 * s),
+            x, y + int(1.5 * s),
+            x - int(2 * s), y + int(3 * s),
+            x - int(1.5 * s), y + int(0.5 * s),
+            x - int(3 * s), y - int(1 * s),
+            x - int(1 * s), y - int(1 * s),
+            fill=random.choice(["gold", "silver"]),
+            outline="white", width=1
+        )
+    
+    # ---- LIGHTS ----
+    lights = []
+    light_positions = [
+        (CENTER_X, int(100 * scale_factor)), 
+        (CENTER_X - int(40 * scale_factor), int(160 * scale_factor)), 
+        (CENTER_X + int(40 * scale_factor), int(160 * scale_factor))
+    ]
+    for x, y in light_positions:
+        light_size = int(3 * scale_factor)
+        lights.append(
+            canvas.create_oval(
+                x - light_size, y - light_size, 
+                x + light_size, y + light_size, 
+                fill="yellow", outline=""
+            )
+        )
+    
+    # ---- TEXT ----
+    if platform.system() == "Darwin":
+        font_size = int(21 * scale_factor)
+        text_font = ("Bradley Hand", font_size, "bold")
+    else:
+        font_size = int(21 * scale_factor)
+        text_font = ("Segoe Script", font_size, "bold")
+    
+    canvas.create_text(
+        CENTER_X, int(230 * scale_factor),
+        text="Happy\nNew Year",
+        fill="#ffd700",
+        font=text_font,
+        justify="center"
+    )
+    
+    # ---- SNOW ----
+    snowflakes = []
+    for _ in range(30):
+        x = random.randint(0, WIDTH)
+        y = random.randint(0, HEIGHT)
+        size = int(random.randint(1, 3) * scale_factor)
+        snowflakes.append(
+            canvas.create_oval(x, y, x + size, y + size, fill="white", outline="")
+        )
+
+WIDTH, HEIGHT = BASE_WIDTH, BASE_HEIGHT
 canvas = tk.Canvas(root, width=WIDTH, height=HEIGHT, bg=canvas_bg, highlightthickness=0)
 canvas.pack()
 
 CENTER_X = WIDTH // 2
 
-# ---- STAR ----
-star = canvas.create_polygon(
-    CENTER_X, 20,
-    CENTER_X + 6, 35,
-    CENTER_X + 22, 35,
-    CENTER_X + 10, 45,
-    CENTER_X + 15, 60,
-    CENTER_X, 50,
-    CENTER_X - 15, 60,
-    CENTER_X - 10, 45,
-    CENTER_X - 22, 35,
-    CENTER_X - 6, 35,
-    fill="gold", outline=""
-)
+# Initial draw
+star = None
+lights = []
+snowflakes = []
+redraw_tree()
 
 star_glow = True
 def glow_star():
     global star_glow
-    canvas.itemconfig(
-        star,
-        fill="gold" if star_glow else "#fff1a8"
-    )
-    star_glow = not star_glow
+    if star:
+        canvas.itemconfig(
+            star,
+            fill="gold" if star_glow else "#fff1a8"
+        )
+        star_glow = not star_glow
     root.after(600, glow_star)
 
 glow_star()
-
-# ---- TREE ----
-canvas.create_polygon(
-    CENTER_X, 50,
-    55, 150,
-    85, 150,
-    35, 270,
-    WIDTH - 35, 270,
-    WIDTH - 85, 150,
-    WIDTH - 55, 150,
-    fill="#0b6623", outline=""
-)
-
-# ---- TRUNK ----
-canvas.create_rectangle(
-    CENTER_X - 15, 270,
-    CENTER_X + 15, 300,
-    fill="#6f4e37", outline=""
-)
-
-# ---- ORNAMENTS ----
-ornament_colors = ["red", "gold", "blue", "pink", "silver", "purple"]
-
-# Better positioned ornaments that stay within tree boundaries
-ornament_positions = [
-    # Top section (narrow)
-    (CENTER_X - 15, 95),
-    (CENTER_X + 15, 95),
-    (CENTER_X, 110),
-    
-    # Upper-middle section
-    (CENTER_X - 25, 125),
-    (CENTER_X + 25, 125),
-    (CENTER_X - 35, 145),
-    (CENTER_X + 35, 145),
-    
-    # Middle section
-    (CENTER_X - 20, 160),
-    (CENTER_X + 20, 160),
-    (CENTER_X - 45, 180),
-    (CENTER_X + 45, 180),
-    
-    # Lower-middle section
-    (CENTER_X - 30, 200),
-    (CENTER_X + 30, 200),
-    (CENTER_X - 50, 220),
-    (CENTER_X + 50, 220),
-    
-    # Bottom section (widest)
-    (CENTER_X - 25, 240),
-    (CENTER_X + 25, 240),
-    (CENTER_X - 40, 255),
-    (CENTER_X + 40, 255)
-]
-
-# Create ornaments with gradient effect
-for x, y in ornament_positions:
-    color = random.choice(ornament_colors)
-    
-    # Main ornament ball
-    ornament = canvas.create_oval(
-        x - 5, y - 5, x + 5, y + 5,
-        fill=color,
-        outline="",
-        width=0
-    )
-    
-    # Add shine/highlight effect (smaller white circle on top-left)
-    shine = canvas.create_oval(
-        x - 3, y - 3, x - 1, y - 1,
-        fill="white",
-        outline="",
-        stipple="gray50"  # Semi-transparent effect
-    )
-    
-    # Add ornament cap/hook at top
-    cap = canvas.create_rectangle(
-        x - 1.5, y - 7, x + 1.5, y - 5,
-        fill="#C0C0C0",  # Silver color
-        outline=""
-    )
-
-# Add some star-shaped ornaments inside the tree
-star_positions = [
-    (CENTER_X - 10, 130),
-    (CENTER_X + 10, 175),
-    (CENTER_X, 210)
-]
-
-for x, y in star_positions:
-    # Create small star ornament
-    star_ornament = canvas.create_polygon(
-        x, y - 3,
-        x + 1, y - 1,
-        x + 3, y - 1,
-        x + 1.5, y + 0.5,
-        x + 2, y + 3,
-        x, y + 1.5,
-        x - 2, y + 3,
-        x - 1.5, y + 0.5,
-        x - 3, y - 1,
-        x - 1, y - 1,
-        fill=random.choice(["gold", "silver"]),
-        outline="white",
-        width=1
-    )
-
-# ---- LIGHTS ----
-lights = []
-for x, y in [(CENTER_X, 100), (CENTER_X - 40, 160), (CENTER_X + 40, 160)]:
-    lights.append(
-        canvas.create_oval(x - 3, y - 3, x + 3, y + 3, fill="yellow", outline="")
-    )
 
 def blink_lights():
     for light in lights:
@@ -204,39 +254,16 @@ def blink_lights():
 
 blink_lights()
 
-# ---- TEXT ----
-
-# Platform-specific font selection
-if platform.system() == "Darwin":  # macOS
-    text_font = ("Bradley Hand", 21, "bold")  # Or "Chalkboard SE", "Marker Felt"
-else:  # Windows/Linux
-    text_font = ("Segoe Script", 21, "bold")
-
-canvas.create_text(
-    CENTER_X, 230,
-    text="Happy\nNew Year",
-    fill="#ffd700",
-    font=text_font,
-    justify="center"
-)
-
-# ---- SNOW ----
-snowflakes = []
-
-for _ in range(30):
-    x = random.randint(0, WIDTH)
-    y = random.randint(0, HEIGHT)
-    size = random.randint(1, 3)
-    snowflakes.append(
-        canvas.create_oval(x, y, x + size, y + size, fill="white", outline="")
-    )
-
 def snowfall():
+    HEIGHT = int(BASE_HEIGHT * scale_factor)
+    WIDTH = int(BASE_WIDTH * scale_factor)
     for flake in snowflakes:
         canvas.move(flake, 0, random.randint(1, 3))
-        if canvas.coords(flake)[1] > HEIGHT:
+        coords = canvas.coords(flake)
+        if coords and coords[1] > HEIGHT:
             x = random.randint(0, WIDTH)
-            canvas.coords(flake, x, 0, x + 2, 2)
+            size = int(2 * scale_factor)
+            canvas.coords(flake, x, 0, x + size, size)
     root.after(50, snowfall)
 
 snowfall()
@@ -254,6 +281,19 @@ def do_move(event):
 canvas.bind("<Button-1>", start_move)
 canvas.bind("<B1-Motion>", do_move)
 
+# ---- SIZE CONTROLS ----
+def increase_size():
+    global scale_factor
+    if scale_factor < 2.0:  # Maximum 200%
+        scale_factor += 0.1
+        update_size()
+
+def decrease_size():
+    global scale_factor
+    if scale_factor > 0.5:  # Minimum 50%
+        scale_factor -= 0.1
+        update_size()
+
 # ---- RIGHT CLICK MENU ----
 def toggle_topmost():
     current = root.attributes("-topmost")
@@ -266,6 +306,10 @@ def show_menu(event):
         menu.add_command(label="Disable Always on Top", command=toggle_topmost)
     else:
         menu.add_command(label="Enable Always on Top", command=toggle_topmost)
+    
+    menu.add_separator()
+    menu.add_command(label="Increase Size", command=increase_size)
+    menu.add_command(label="Decrease Size", command=decrease_size)
     
     menu.add_separator()
     menu.add_command(label="Close", command=root.destroy)
